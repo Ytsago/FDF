@@ -11,9 +11,9 @@ BLUE   = \033[34m
 RED    = \033[31m
 RESET  = \033[0m
 
-CFILE =	main.c
+FILE =	main.c
 
-FILE =	main.c check_map.c map_parsing.c pathing.c drawing.c input.c setting.c \
+CFILE =	main.c check_map.c map_parsing.c pathing.c drawing.c input.c setting.c \
 		event.c loading.c setting_change.c
 
 LIB_D = libft/
@@ -22,9 +22,9 @@ MLX_D = minilibx-linux/
 
 LIB = $(LIB_D)libft.a $(MLX_D)libmlx.a $(MLX_D)libmlx_Linux.a
 
-CSRCDIR = src_bonus/
+SRCDIR = src_bonus/
 
-SRCDIR = src/
+CSRCDIR = src/
 
 SRCS = $(SRCDIR)$(FILE)
 
@@ -54,6 +54,9 @@ $(OBJDIR):
 $(LIB): FORCE
 	@$(MAKE) -C $(LIB_D) --no-print-directory
 	@$(MAKE) -C $(MLX_D) --no-print-directory
+
+bonus:
+	$(MAKE) SRCDIR="$(CSRCDIR)" FILE="$(CFILE)" makeoverriden=false
 
 clean:
 	@echo "$(RED)Deleting object files...$(RESET)"

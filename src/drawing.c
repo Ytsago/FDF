@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 12:08:12 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:45:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,36 @@ void	erease_cursor(t_pict *img, int x, int y)
 		{
 			pixel = &img->addr[(y + i) * img->l_len + (x + j) * img->bytes / 8];
 			*(unsigned int *) pixel = 0x432a73;
+			j++;
+		}
+		i++;
+	}
+}
+
+char	*get_color(t_pict img, int i, int j)
+{
+	return (&img.addr[i * img.l_len + j * img.bytes / 8]);
+}
+
+void	merge_image(t_pict screen, t_pict test, t_vect pos)
+{
+	int		i;
+	int		j;
+	char	*pixel;
+	char	*color;
+
+	(void) test;
+	i = 0 + pos.y;
+	color = 0;
+	while (i < 64)
+	{
+		j = 0 + pos.y;
+		while (j < 64)
+		{
+			pixel = &screen.addr[i * screen.l_len + j * screen.bytes / 8];
+			color = get_color(test, i , j);
+			if (*(int *) color != -16777216)
+				*(unsigned int *) pixel = *(unsigned int *) color;
 			j++;
 		}
 		i++;
