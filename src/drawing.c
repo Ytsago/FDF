@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 18:45:24 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:55:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	erease_cursor(t_pict *img, int x, int y)
 	}
 }
 
-char	*get_color(t_pict img, int i, int j)
+/* char	*get_color(t_pict img, int i, int j)
 {
 	return (&img.addr[i * img.l_len + j * img.bytes / 8]);
 }
@@ -80,7 +80,7 @@ void	merge_image(t_pict screen, t_pict test, t_vect pos)
 		}
 		i++;
 	}
-}
+} */
 
 static void	draw_tiles(t_data *data, size_t x[2], size_t y[2])
 {
