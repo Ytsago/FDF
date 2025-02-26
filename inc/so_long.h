@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 08:59:37 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 14:20:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,16 @@
 # define ENTER 65293
 # define SPACE 32
 
+// settings
+# define MAX_VELOCITY 15
+# define FRICTION 0.80
+# define ASSET 64
+
 # include "mlx.h"
 # include "mlx_int.h"
 # include "libft.h"
 # include "ft_printf.h"
+# include <sys/time.h>
 
 enum e_type
 {
@@ -96,19 +102,21 @@ typedef struct s_entity
 	t_vect			pos;
 	t_vect			velo;
 	t_vect			acc;
-	t_hitbox		hitobx;
+	t_hitbox		hitbox;
 	int				life;
 	struct s_entity	*next;
 }	t_entity;
 
 typedef struct s_engine
 {
-	int		key;
-	int		jump;
-	int		end;
-	int		obj;
-	int		move;
-	int		set;
+	int				key;
+	int				jump;
+	int				end;
+	int				obj;
+	int				move;
+	int				set;
+	char			frame;
+	struct timeval	time;
 	t_pict	screen;
 }	t_engine;
 

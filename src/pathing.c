@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:06:09 by secros            #+#    #+#             */
-/*   Updated: 2025/02/25 19:53:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 14:20:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	all_access(t_data *data, char **map)
 	size_t	j;
 
 	j = 0;
-	pathing(data->player.pos.x / 64, data->player.pos.y / 64, map);
+	pathing(data->player.pos.x / ASSET, data->player.pos.y / ASSET, map);
 	while (map[j])
 	{
 		i = 0;

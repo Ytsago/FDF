@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:16:20 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 09:21:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 14:21:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	data_init(t_data *data)
 	data->mlx_info.w_size->x, data->mlx_info.w_size->y, TITLE);
 	if (!data->mlx_info.win)
 		clean_exit(data, 1);
-	data->engine.screen.img =mlx_new_image(data->mlx_info.mlx, 64, 64);
+	data->engine.screen.img =mlx_new_image(data->mlx_info.mlx, ASSET, ASSET);
 	if (!data->engine.screen.img)
 		return ((void) clean_exit(data, 1));
 	data->engine.screen.addr = mlx_get_data_addr(data->engine.screen.img, \
@@ -71,6 +71,8 @@ int	launch(t_data *data)
 	asset_init(&data->sprite);
 	data_init(data);
 	world_init(data);
+	if (gettimeofday(&data->engine.time, NULL) == -1)
+		clean_exit(data, 1);
 	mlx_loop_hook(data->mlx_info.mlx, game_loop, data);
 	mlx_hook(data->mlx_info.win, KeyPress, KeyPressMask, input, data);
 	mlx_hook(data->mlx_info.win, KeyRelease, KeyReleaseMask, key_release, data);

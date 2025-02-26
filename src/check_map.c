@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:07:57 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:19:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 14:21:25 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ static int	set_player(t_data *data, int x, int y)
 {
 	if (data->player.pos.x == 0 && data->player.pos.y == 0)
 	{
-		data->player.pos.x = x * 64;
-		data->player.pos.y = y * 64;
+		data->player.pos.x = x * ASSET;
+		data->player.pos.y = y * ASSET;
 		return (0);
 	}
 	return (1);
