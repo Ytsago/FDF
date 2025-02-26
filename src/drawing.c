@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 18:55:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 07:58:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,104 +52,147 @@ void	erease_cursor(t_pict *img, int x, int y)
 	}
 }
 
-/* char	*get_color(t_pict img, int i, int j)
+char	*get_color(t_pict *img, int i, int j)
 {
-	return (&img.addr[i * img.l_len + j * img.bytes / 8]);
+	return (&img->addr[i * img->l_len + j * img->bytes / 8]);
 }
 
-void	merge_image(t_pict screen, t_pict test, t_vect pos)
+char	*get_asset(t_data *data, t_vect pos_img)
+{
+	t_vect	pos;
+	t_pict	*img;
+
+	img = &data->sprite.tile;
+	pos.x = (data->player.pos.x + pos_img.x);
+	pos.y = (data->player.pos.y + pos_img.y);
+
+	if (data->map[pos.y / 64][pos.x / 64] == '1' && data->map[pos.y / 64 + 1] && data->map[pos.y / 64 + 1][pos.x / 64] == '1')
+		return (get_color(&data->sprite.wall2, pos.y % 64, pos.x % 64));
+	if (data->map[pos.y / 64][pos.x / 64] == '1')
+		return (get_color(&data->sprite.wall, pos.y % 64, pos.x % 64));
+	if (data->map[pos.y / 64][pos.x / 64] == 'e' && data->engine.obj > 0)
+		return (get_color(&data->sprite.c_ex, pos.y % 64, pos.x % 64));
+	if (data->map[pos.y / 64][pos.x / 64] == 'e' && data->engine.obj == 0)
+		return (get_color(&data->sprite.o_ex, pos.y % 64, pos.x % 64));
+	if (data->map[pos.y / 64][pos.x / 64] == 'c')
+		return (get_color(&data->sprite.obj, pos.y % 64, pos.x % 64));
+	if (data->map[pos.y / 64][pos.x / 64] == '2')
+		return (get_color(&data->sprite.tile, pos.y % 64, pos.x % 64));
+	return (get_color(img, pos.y % 64, pos.x % 64));
+}
+
+void	merge_image(t_pict screen, t_pict *img, t_data *data)
 {
 	int		i;
 	int		j;
 	char	*pixel;
 	char	*color;
 
-	(void) test;
-	i = 0 + pos.y;
+	(void) data;
+	i = 0;
 	color = 0;
 	while (i < 64)
 	{
-		j = 0 + pos.y;
+		j = 0;
 		while (j < 64)
 		{
 			pixel = &screen.addr[i * screen.l_len + j * screen.bytes / 8];
-			color = get_color(test, i , j);
-			if (*(int *) color != -16777216)
-				*(unsigned int *) pixel = *(unsigned int *) color;
+			color = get_color(img, i, j);
+			if (*(int *) color == -16777216)
+				color = get_asset(data, (t_vect){j, i});
+			*(unsigned int *) pixel = *(unsigned int *) color;
 			j++;
 		}
 		i++;
 	}
-} */
+}
 
-static void	draw_tiles(t_data *data, size_t x[2], size_t y[2])
+static void	draw_tiles(t_data *data, int x[2], int y[2], t_vect offset_pix)
 {
 	t_pict	*img;
 
 	if (data->map[y[1]][x[1]] == '\n' || data->map[y[1]][x[1]] == '\0')
 		return ;
-	if (data->map[y[1]][x[1]] == 'p')
-		img = &data->sprite.play;
-	if (data->map[y[1]][x[1]] == '1')
-		img = &data->sprite.wall;
-	if (data->map[y[1]][x[1]] == '2' || data->map[y[1]][x[1]] == '0')
+	else if (data->map[y[1]][x[1]] == '2' || data->map[y[1]][x[1]] == '0')
 		img = &data->sprite.tile;
-	if (data->map[y[1]][x[1]] == 'e' && data->engine.obj > 0)
+	else if (data->map[y[1]][x[1]] == 'e' && data->engine.obj > 0)
 		img = &data->sprite.c_ex;
-	if (data->map[y[1]][x[1]] == 'e' && data->engine.obj == 0)
+	else if (data->map[y[1]][x[1]] == 'e' && data->engine.obj == 0)
 		img = &data->sprite.o_ex;
-	if (data->map[y[1]][x[1]] == 'c')
+	else if (data->map[y[1]][x[1]] == 'c')
 		img = &data->sprite.obj;
-	if (data->map[y[1] + 1] && data->map[y[1] + 1][x[1]] == '1'
+	else if (data->map[y[1] + 1] && data->map[y[1] + 1][x[1]] == '1'
 		&& data->map[y[1]][x[1]] == '1')
 		img = &data->sprite.wall2;
+	else if (data->map[y[1]][x[1]] == '1')
+		img = &data->sprite.wall;
+	else
+		img = &data->sprite.tile;
 	mlx_put_image_to_window(data->mlx_info.mlx, \
-		data->mlx_info.win, img->img, x[0] * 64, y[0] * 64);
+		data->mlx_info.win, img->img, x[0] * 64 - offset_pix.x, y[0] * 64 - offset_pix.y);
 }
 
-static void	draw_world(t_data *data, size_t i, size_t j)
+static void	draw_world(t_data *data, t_vect offset, t_vect offset_pix)
 {
-	size_t			y[2];
-	size_t			x[2];
+	int	y[2];
+	int	x[2];
 
 	y[0] = 0;
-	y[1] = y[0] + j;
-	while (y[0] <= data->mlx_info.w_size[1] / 64 && data->map[y[1]])
+	y[1] = y[0] + offset.y;
+	while (y[0] <= data->mlx_info.w_size->y / 64 + 2 && data->map[y[1]])
 	{
 		x[0] = 0;
-		x[1] = x[0] + i;
-		while (x[0] <= data->mlx_info.w_size[0] + 1 \
+		x[1] = x[0] + offset.x;
+		while (x[0] <= data->mlx_info.w_size->x + 1 \
 		/ 64 && data->map[y[1]][x[1]])
 		{
-			draw_tiles(data, x, y);
+			draw_tiles(data, x, y, offset_pix);
 			x[1]++;
 			x[0]++;
 		}
 		y[1]++;
 		y[0]++;
 	}
+	
 }
 
 void	world_init(t_data *data)
 {
-	int	i;
-	int	j;
+	t_vect	offset;
+	t_vect	offset_pix;
 
-	i = data->mlx_info.w_size[0] / 128;
-	j = data->mlx_info.w_size[1] / 128;
-	i = data->player.pos.x / 64 - i;
-	if (data->player.pos.x / 64 + data->mlx_info.w_size[0] / 128 > \
-		ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size[0] % 128 == 0))
-		i = ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size[0] % 128 == 0) \
-			- data->mlx_info.w_size[0] / 64;
-	if (i < 0)
-		i = 0;
-	j = data->player.pos.y / 64 - j;
-	if (data->player.pos.y / 64 + data->mlx_info.w_size[1] / 128 > \
-	ft_tablen(data->map) - 1)
-		j = ft_tablen(data->map) - 1 + (data->mlx_info.w_size[0] % 128 != 0) + \
-		(data->mlx_info.w_size[1] % 128 == 112) - data->mlx_info.w_size[1] / 64;
-	if (j < 0)
-		j = 0;
-	draw_world(data, i, j);
+	offset.x = data->mlx_info.w_size->x / 128;
+	offset.x = data->player.pos.x / 64 - offset.x;
+	offset_pix.x = data->player.pos.x % 64;
+	offset_pix.y = data->player.pos.y % 64;
+	if (data->player.pos.x / 64 + (offset_pix.x > 0) + data->mlx_info.w_size->x / 128 > \
+		(int) ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size->x % 128 == 0))
+	{
+		offset.x = ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size->x \
+		% 128 == 0) - data->mlx_info.w_size->x / 64;
+		offset_pix.x = 0;
+	}
+	if (((offset.x * 64 - offset_pix.x) / 64) < 0)
+	{
+		offset.x = 0;
+		offset_pix.x = 0;
+	}
+	offset.y = data->mlx_info.w_size->y / 128;
+	offset.y = data->player.pos.y / 64 - offset.y;
+	if (data->player.pos.y / 64 + (offset_pix.y > 0) + data->mlx_info.w_size->y / 128 > \
+	(int) ft_tablen(data->map) - 1)
+	{
+		offset.y = ft_tablen(data->map) - 1 + (data->mlx_info.w_size->x \
+		% 128 != 0) + (data->mlx_info.w_size->y % 128 == 112) \
+		- data->mlx_info.w_size->y / 64;
+		offset_pix.y = 0;
+	}
+	if (offset.y * 64 + offset_pix.y < 0)
+	{
+		offset.y = 0;
+		offset_pix.y = 0;
+	}
+	draw_world(data, offset, offset_pix);
+	merge_image(data->engine.screen[0], &data->sprite.play, data);
+	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen[0].img, data->player.pos.x - offset.x * 64 - offset_pix.x ,data->player.pos.y - offset.y * 64 - offset_pix.y);
 }

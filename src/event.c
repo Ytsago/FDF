@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:25:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:14:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/25 21:59:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	close_button(t_data *data)
 
 int	quit(t_data *data)
 {
-	data->mlx_info.w_size[1] = 390;
+	data->mlx_info.w_size->y = 390;
 	confirm(data, 0);
 	return (0);
 }

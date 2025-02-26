@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 17:21:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 06:24:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // sprite
 # define WALL "./sprite/wall.xpm"
 # define WALL2 "./sprite/wall2.xpm"
-# define PLAYER "./sprite/play.xpm"
+# define PLAYER "./sprite/test.xpm"//"./sprite/play.xpm"
 # define OBJ "./sprite/obj.xpm"
 # define CEXIT "./sprite/door.xpm"
 # define OEXIT "./sprite/door_o.xpm"
@@ -56,6 +56,18 @@ enum e_render
 	MAX,
 };
 
+typedef struct s_vect
+{
+	int	x;
+	int	y;
+}	t_vect;
+
+typedef struct s_hitbox
+{
+	t_vect	top;
+	t_vect	bot;
+}	t_hitbox;
+
 typedef struct s_pict
 {
 	void	*img;
@@ -63,6 +75,7 @@ typedef struct s_pict
 	int		bytes;
 	int		l_len;
 	int		endian;
+	t_vect	size;
 }	t_pict;
 
 typedef struct s_sprite
@@ -77,35 +90,33 @@ typedef struct s_sprite
 	t_pict	end;
 }	t_sprite;
 
-typedef struct s_vect
-{
-	int	x;
-	int	y;
-}	t_vect;
-
 typedef struct s_entity
 {
 	int				type;
 	t_vect			pos;
+	t_vect			velo;
+	t_vect			acc;
+	t_hitbox		hitobx;
 	int				life;
 	struct s_entity	*next;
 }	t_entity;
 
 typedef struct s_engine
 {
-	int	key;
-	int	jump;
-	int	end;
-	int	obj;
-	int	move;
-	int	set;
+	int		key;
+	int		jump;
+	int		end;
+	int		obj;
+	int		move;
+	int		set;
+	t_pict	screen[2];
 }	t_engine;
 
 typedef struct s_mlx
 {
 	void	*mlx;
 	void	*win;
-	size_t	w_size[2];
+	t_vect	w_size[2];
 }	t_mlx;
 
 typedef struct s_data
@@ -139,13 +150,14 @@ int		all_access(t_data *data, char **map);
 
 //input and moving
 int		input(int key, void *param);
+int		key_release(int key, t_data *data);
 void	end_game(t_data *data);
 int		clean_exit(t_data *data, int error);
 int		close_button(t_data *data);
 int		quit(t_data *data);
 
 //generate world
-int		rendering(t_data *param);
+int		game_loop(t_data *param);
 void	world_init(t_data *data);
 
 #endif

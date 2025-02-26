@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:28:06 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:12:54 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/25 22:00:10 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 static t_pict	new_image(t_data *data, char *path)
 {
 	t_pict	img;
-	int		x;
-	int		y;
 
-	img.img = mlx_xpm_file_to_image(data->mlx_info.mlx, path, &x, &y);
+	img.img = mlx_xpm_file_to_image(data->mlx_info.mlx, path, &img.size.x, &img.size.y);
 	if (!img.img)
 		write (2, "Failed to load asset\n", 21);
 	else
@@ -49,22 +47,22 @@ void	resolution(t_data *data)
 {
 	if (data->engine.set == LOW)
 	{
-		data->mlx_info.w_size[0] = 1080;
-		data->mlx_info.w_size[1] = 720;
+		data->mlx_info.w_size->x = 1080;
+		data->mlx_info.w_size->y = 720;
 	}
 	if (data->engine.set == MEDIUM)
 	{
-		data->mlx_info.w_size[0] = 1920;
-		data->mlx_info.w_size[1] = 1080;
+		data->mlx_info.w_size->x = 1920;
+		data->mlx_info.w_size->y = 1080;
 	}
 	if (data->engine.set == HIGH)
 	{
-		data->mlx_info.w_size[0] = 2560;
-		data->mlx_info.w_size[1] = 1440;
+		data->mlx_info.w_size->x = 2560;
+		data->mlx_info.w_size->y = 1440;
 	}
 	if (data->engine.set == MAX)
 	{
-		data->mlx_info.w_size[0] = 3840;
-		data->mlx_info.w_size[1] = 2160;
+		data->mlx_info.w_size->x = 3840;
+		data->mlx_info.w_size->y = 2160;
 	}
 }

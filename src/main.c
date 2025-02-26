@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:16:20 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:30:28 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 06:26:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,13 @@ static void	data_init(t_data *data)
 	data->engine.end = 0;
 	resolution(data);
 	data->mlx_info.win = mlx_new_window(data->mlx_info.mlx, \
-	data->mlx_info.w_size[0], data->mlx_info.w_size[1], TITLE);
+	data->mlx_info.w_size->x, data->mlx_info.w_size->y, TITLE);
 	if (!data->mlx_info.win)
 		clean_exit(data, 1);
+	data->engine.screen[0].img = mlx_new_image(data->mlx_info.mlx, 64, 64);
+	data->engine.screen->addr = mlx_get_data_addr(data->engine.screen[0].img, \
+	&data->engine.screen[0].bytes, \
+	&data->engine.screen[0].l_len, &data->engine.screen[0].endian);
 	load_asset(data);
 }
 
@@ -38,8 +42,8 @@ void	end_game(t_data *data)
 	size_t		y;
 	void		*pt[4];
 
-	x = data->mlx_info.w_size[0] / 2 - 450;
-	y = data->mlx_info.w_size[1] / 2 - 350;
+	x = data->mlx_info.w_size->x / 2 - 450;
+	y = data->mlx_info.w_size->y / 2 - 350;
 	pt[0] = data->mlx_info.mlx;
 	pt[1] = data->mlx_info.win;
 	pt[2] = data->sprite.end.img;
@@ -65,8 +69,9 @@ int	launch(t_data *data)
 	asset_init(&data->sprite);
 	data_init(data);
 	world_init(data);
-	mlx_loop_hook(data->mlx_info.mlx, rendering, data);
+	mlx_loop_hook(data->mlx_info.mlx, game_loop, data);
 	mlx_hook(data->mlx_info.win, KeyPress, KeyPressMask, input, data);
+	mlx_hook(data->mlx_info.win, KeyRelease, KeyReleaseMask, key_release, data);
 	mlx_hook(data->mlx_info.win, DestroyNotify, 0, close_button, data);
 	mlx_loop(data->mlx_info.mlx);
 	return (0);
@@ -77,6 +82,7 @@ int	main(int ac, char **av)
 	t_data	data;
 	t_pict	load;
 
+	ft_bzero(&data, sizeof(t_data));
 	if (ac != 2 || map_parsing(&data, av[1]))
 	{
 		if (ac != 2)

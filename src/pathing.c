@@ -6,32 +6,12 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:06:09 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:16:39 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/25 19:53:34 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	rendering(t_data *data)
-{
-	char	*str;
-	char	*step;
-
-	if (data->engine.end == 0)
-	{
-		world_init(data);
-		step = ft_itoa(data->engine.move);
-		if (!step)
-			clean_exit(data, 1);
-		str = ft_strjoin("Step :", step);
-		free (step);
-		if (!str)
-			return (clean_exit(data, 1));
-		mlx_string_put(data->mlx_info.mlx, data->mlx_info.win, 15, 15, 0, str);
-		free (str);
-	}
-	return (1);
-}
 
 static int	is_path(size_t x, size_t y, char **map)
 {

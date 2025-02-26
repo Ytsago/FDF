@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 17:22:51 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 17:56:09 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/25 21:48:47 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	merge_image(t_pict screen, t_pict test, t_vect pos)
 	(void) test;
 	i = 0 + pos.y;
 	color = 0;
-	while (i < 64)
+	while (i < screen.size.y)
 	{
 		j = 0 + pos.y;
-		while (j < 64)
+		while (j < screen.size.x)
 		{
 			pixel = &screen.addr[i * screen.l_len + j * screen.bytes / 8];
 			color = get_color(test, i , j);
@@ -47,15 +47,13 @@ int	main()
 {
 	t_data	data;
 	t_pict	pt[3];
-	int		i[2];
 	t_vect pos = {0, 0};
 
-	ft_bzero(&i, sizeof(int) * 2);
 	data.mlx_info.mlx = mlx_init();
 	data.mlx_info.win = mlx_new_window(data.mlx_info.mlx, 500, 500, "TEST");
 	pt[0].img = mlx_new_image(data.mlx_info.mlx, 500, 500);
-	pt[1].img = mlx_xpm_file_to_image(data.mlx_info.mlx, WALL, &i[0], &i[1]);
-	pt[2].img = mlx_xpm_file_to_image(data.mlx_info.mlx, TEST, &i[0], &i[1]);
+	pt[1].img = mlx_xpm_file_to_image(data.mlx_info.mlx, WALL, &pt[0].size.x, &pt[0].size.y);
+	pt[2].img = mlx_xpm_file_to_image(data.mlx_info.mlx, TEST, &pt[1].size.x, &pt[1].size.y);
 	pt[0].addr = mlx_get_data_addr(pt[0].img, &pt[0].bytes, &pt[0].l_len, &pt[0].endian);
 	pt[2].addr = mlx_get_data_addr(pt[2].img, &pt[2].bytes, &pt[2].l_len, &pt[2].endian);
 	pt[1].addr = mlx_get_data_addr(pt[1].img, &pt[1].bytes, &pt[1].l_len, &pt[1].endian);

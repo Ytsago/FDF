@@ -6,14 +6,14 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:22:00 by secros            #+#    #+#             */
-/*   Updated: 2025/02/23 10:23:19 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 04:08:17 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "ft_printf.h"
 
-static void	check_pos(t_data *data)
+/* static void	check_pos(t_data *data)
 {
 	int	x;
 	int	y;
@@ -31,48 +31,51 @@ static void	check_pos(t_data *data)
 		end_game(data);
 }
 
-static void	moving(t_data *data, int *x, int *y, int dir)
+static void	moving(t_data *data, int dir)
 {
 	data->engine.move++;
-	data->map[*y / 64][*x / 64] = '2';
+	// data->map[*y / 64][*x / 64] = '2';
 	if (ft_printf("move :%d\n", data->engine.move) == -1)
 		return ((void) clean_exit(data, 1));
 	if (dir == 1)
-		*y -= 64;
+		data->player.acc.y = -1;
 	else if (dir == 2)
-		*x += 64;
+		data->player.acc.x = 1;
 	else if (dir == 3)
-		*x -= 64;
+		data->player.pos.x -= 1;
 	else if (dir == 4)
-		*y += 64;
+		data->player.pos.y += 1;
 	check_pos(data);
-	data->map[*y / 64][*x / 64] = 'p';
+	// data->map[*y / 64][*x / 64] = 'p';
 }
-
+ */
 int	input(int key, void *param)
 {
-	char		**map;
-	t_data		*data;
-	int			x;
-	int			y;
+	t_data *data;
 
 	data = param;
-	map = data->map;
-	x = data->player.pos.x / 64;
-	y = data->player.pos.y / 64;
+	if (key == SPACE)
+		data->player.acc.y = -5;
+	if (key == D_KEY)
+		data->player.acc.x = +1;
+	if (key == S_KEY)
+		data->player.acc.y = +1;
+	if (key == A_KEY)
+		data->player.acc.x = -1;
 	if (key == ESCAPE)
-		clean_exit(param, 0);
-	if (key == W_KEY && map[y - 1][x] != '1' && data->engine.end == 0
-		&& (map[y - 1][x] != 'e' || data->engine.obj == 0))
-		moving(data, &data->player.pos.x, &data->player.pos.y, 1);
-	if (key == D_KEY && map[y][x + 1] != '1' && data->engine.end == 0
-		&& (map[y][x + 1] != 'e' || data->engine.obj == 0))
-		moving(data, &data->player.pos.x, &data->player.pos.y, 2);
-	if (key == A_KEY && map[y][x - 1] != '1' && data->engine.end == 0
-		&& (map[y][x - 1] != 'e' || data->engine.obj == 0))
-		moving(data, &data->player.pos.x, &data->player.pos.y, 3);
-	if (key == S_KEY && map[y + 1][x] != '1' && data->engine.end == 0
-		&& (map[y + 1][x] != 'e' || data->engine.obj == 0))
-		moving(data, &data->player.pos.x, &data->player.pos.y, 4);
+		clean_exit(data, 0);
+	return (1);
+}
+
+int	key_release(int key, t_data *data)
+{
+	if (key == SPACE)
+		data->player.acc.y = 0;
+	if (key == D_KEY)
+		data->player.acc.x = 0;
+	if (key == S_KEY)
+		data->player.acc.y = 0;
+	if (key == A_KEY)
+		data->player.acc.x = 0;
 	return (1);
 }

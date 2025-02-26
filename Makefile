@@ -14,7 +14,7 @@ RESET  = \033[0m
 CFILE =	main.c
 
 FILE =	main.c check_map.c map_parsing.c pathing.c drawing.c input.c setting.c \
-		event.c loading.c setting_change.c
+		event.c loading.c setting_change.c game_loop.c
 
 LIB_D = libft/
 
@@ -38,7 +38,7 @@ OBJS = $(FILE:%.c=$(OBJDIR)%.o)
 
 NAME = so_long
 
-all: $(NAME)
+all: $(NAME) Makefile
 
 $(NAME) : $(OBJS)
 	@echo "$(YELLOW)Creating final product : $(BLUE)$@...$(RESET)"
