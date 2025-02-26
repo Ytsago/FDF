@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 08:01:12 by secros            #+#    #+#             */
-/*   Updated: 2025/02/25 22:00:29 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 09:19:20 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ void	loading_screen(t_data *data, t_pict *load)
 {
 	int		x[2];
 
+	data->engine.set = LOW;
 	data->load = load;
 	load->img = mlx_xpm_file_to_image(data->mlx_info.mlx, \
 	"./sprite/loading.xpm", &x[1], &x[0]);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 07:58:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 09:00:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,6 @@ void	world_init(t_data *data)
 		offset_pix.y = 0;
 	}
 	draw_world(data, offset, offset_pix);
-	merge_image(data->engine.screen[0], &data->sprite.play, data);
-	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen[0].img, data->player.pos.x - offset.x * 64 - offset_pix.x ,data->player.pos.y - offset.y * 64 - offset_pix.y);
+	merge_image(data->engine.screen, &data->sprite.play, data);
+	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen.img, data->player.pos.x - offset.x * 64 - offset_pix.x ,data->player.pos.y - offset.y * 64 - offset_pix.y);
 }

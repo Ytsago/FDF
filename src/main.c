@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:16:20 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 06:26:37 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 09:21:56 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ static void	data_init(t_data *data)
 	data->mlx_info.w_size->x, data->mlx_info.w_size->y, TITLE);
 	if (!data->mlx_info.win)
 		clean_exit(data, 1);
-	data->engine.screen[0].img = mlx_new_image(data->mlx_info.mlx, 64, 64);
-	data->engine.screen->addr = mlx_get_data_addr(data->engine.screen[0].img, \
-	&data->engine.screen[0].bytes, \
-	&data->engine.screen[0].l_len, &data->engine.screen[0].endian);
+	data->engine.screen.img =mlx_new_image(data->mlx_info.mlx, 64, 64);
+	if (!data->engine.screen.img)
+		return ((void) clean_exit(data, 1));
+	data->engine.screen.addr = mlx_get_data_addr(data->engine.screen.img, \
+	&data->engine.screen.bytes, \
+	&data->engine.screen.l_len, &data->engine.screen.endian);
 	load_asset(data);
 }
 
@@ -40,15 +42,15 @@ void	end_game(t_data *data)
 {
 	size_t		x;
 	size_t		y;
-	void		*pt[4];
+	void		*pt[3];
 
 	x = data->mlx_info.w_size->x / 2 - 450;
 	y = data->mlx_info.w_size->y / 2 - 350;
 	pt[0] = data->mlx_info.mlx;
 	pt[1] = data->mlx_info.win;
 	pt[2] = data->sprite.end.img;
-	mlx_clear_window(data->mlx_info.mlx, data->mlx_info.win);
 	data->engine.end = 1;
+	mlx_clear_window(data->mlx_info.mlx, data->mlx_info.win);
 	mlx_put_image_to_window(pt[0], pt[1], pt[2], x, y);
 }
 
@@ -103,6 +105,5 @@ int	main(int ac, char **av)
 		free (data.mlx_info.mlx);
 		return ((void) write (2, "Error\nCan't create window", 25), 1);
 	}
-	data.engine.set = LOW;
 	loading_screen(&data, &load);
 }

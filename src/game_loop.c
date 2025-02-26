@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 19:53:36 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 08:08:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 09:18:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,47 +56,47 @@ void	step_count(t_data *data)
 int check_collision(t_data *data, t_hitbox hitbox, t_vect velo, char c)
 {
     // Horizontal check (left/right)
-
-	if (velo.x != 0)
-	{
-		if (data->map[(data->player.pos.y + hitbox.top.y) / 64][(data->player.pos.x + hitbox.top.x + velo.x) / 64] == c)
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.bot.y) / 64][(data->player.pos.x + hitbox.top.x + velo.x) / 64] == c)
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.top.y) / 64][(data->player.pos.x + hitbox.bot.x + velo.x) / 64] == c)
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.bot.y) / 64][(data->player.pos.x + hitbox.bot.x + velo.x) / 64] == c)
-			return (0);
-	}
-	if (velo.y != 0)
-	{
-		if (data->map[(data->player.pos.y + hitbox.top.y + velo.y) / 64][(data->player.pos.x + hitbox.top.x) / 64] == c) 
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.bot.y + velo.y) / 64][(data->player.pos.x + hitbox.bot.x) / 64] == c)
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.top.y + velo.y) / 64][(data->player.pos.x + hitbox.bot.x) / 64] == c) 
-			return (0);
-		if (data->map[(data->player.pos.y + hitbox.bot.y + velo.y) / 64][(data->player.pos.x + hitbox.top.x) / 64] == c)
-			return (0);
-	}
+	if (data->map[(data->player.pos.y + hitbox.top.y + velo.y) / 64][(data->player.pos.x + hitbox.top.x + velo.x) / 64] == c)
+		return (0);
+	if (data->map[(data->player.pos.y + hitbox.bot.y + velo.y) / 64][(data->player.pos.x + hitbox.top.x + velo.x) / 64] == c)
+		return (0);
+	if (data->map[(data->player.pos.y + hitbox.top.y + velo.y) / 64][(data->player.pos.x + hitbox.bot.x + velo.x) / 64] == c)
+		return (0);
+	if (data->map[(data->player.pos.y + hitbox.bot.y + velo.y) / 64][(data->player.pos.x + hitbox.bot.x + velo.x) / 64] == c)
+		return (0);
     return (1);
+}
+
+char	remove_obj(t_data *data, t_hitbox hitbox, char c)
+{
+	t_vect	pos;
+
+	pos = (t_vect){data->player.pos.x, data->player.pos.y};
+	if (data->map[(pos.y + hitbox.top.y) / 64][(pos.x + hitbox.top.x) / 64] == c)
+		return (data->map[(pos.y + hitbox.top.y) / 64]\
+		[(pos.x + hitbox.top.x) / 64] = c - 32);
+	if (data->map[(pos.y + hitbox.bot.y) / 64][(pos.x + hitbox.top.x) / 64] == c)
+		return (data->map[(pos.y + hitbox.bot.y) / 64]\
+		[(pos.x + hitbox.top.x) / 64] = c - 32);
+	if (data->map[(pos.y + hitbox.top.y) / 64][(pos.x + hitbox.bot.x) / 64] == c)
+		return (data->map[(pos.y + hitbox.top.y) / 64]\
+		[(pos.x + hitbox.bot.x) / 64] = c - 32);
+	if (data->map[(pos.y + hitbox.bot.y) / 64][(pos.x + hitbox.bot.x) / 64] == c)
+		return (data->map[(pos.y + hitbox.bot.y) / 64]\
+		[(pos.x + hitbox.bot.x) / 64] = c - 32);
+	return (0);
 }
 
 static void	check_pos(t_data *data)
 {
 	int	x;
 	int	y;
-	int	count;
 
 	x = data->player.pos.x / 64;
 	y = data->player.pos.y / 64;
-	count = 0;
-	if (data->map[y][x] == 'c' && !check_collision(data, data->player.hitobx, (t_vect){1, 1}, 'c'))
-	{
-		data->map[y][x] = 'C';
+	if (remove_obj(data, data->player.hitobx, 'c'))
 		data->engine.obj--;
-	}
-	else if (data->engine.obj == 0 && !check_collision(data, data->player.hitobx, (t_vect){1, 1}, 'e'))
+	if (data->engine.obj == 0 && remove_obj(data, data->player.hitobx, 'e'))
 		end_game(data);
 }
 // Movement function that checks for collisions before applying movement
@@ -124,15 +124,14 @@ void movement(t_data *data)
 		data->player.pos.y += data->player.velo.y;
 }
 
-
 int	game_loop(t_data *data)
 {
 	if (data->engine.end == 0)
 	{
 		movement(data);
-		check_pos(data);
 		step_count(data);
 		world_init(data);
+		check_pos(data);
 	}
 	return (1);
 }

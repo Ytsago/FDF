@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:25:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/25 21:59:33 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 09:21:04 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	clean_exit(t_data *data, int error)
 	destroy_image(data->mlx_info.mlx, data->sprite.tile.img);
 	destroy_image(data->mlx_info.mlx, data->sprite.wall2.img);
 	destroy_image(data->mlx_info.mlx, data->sprite.end.img);
+	destroy_image(data->mlx_info.mlx, data->engine.screen.img);
 	mlx_destroy_display(data->mlx_info.mlx);
 	free(data->mlx_info.mlx);
 	if (error)

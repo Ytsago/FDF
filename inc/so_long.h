@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 06:24:31 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/26 08:59:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ typedef struct s_engine
 	int		obj;
 	int		move;
 	int		set;
-	t_pict	screen[2];
+	t_pict	screen;
 }	t_engine;
 
 typedef struct s_mlx
