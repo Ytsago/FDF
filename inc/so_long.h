@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 13:58:49 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:30:22 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@
 # define TILE "./sprite/tile.xpm"
 # define END "./sprite/end.xpm"
 
+//animated sprite
+# define I_PLAYER "./sprite/play_i.xpm"
+# define F_PLAYER "./sprite/play_f.xpm"
+# define B_PLAYER "./sprite/play_b.xpm"
+# define U_PLAYER
+# define D_PLAYER
+
 // key map
 # define W_KEY 119
 # define A_KEY 97
@@ -36,13 +43,14 @@
 # define ESCAPE 65307
 # define ENTER 65293
 # define SPACE 32
-# define F_KEY
+# define F_KEY 102
 
 // settings
 # define MAX_VELOCITY 15
 # define FRICTION 0.30
 # define ASSET 64
 # define FRAME_RATE 1000000 / 60
+# define FRAME_SPEED 10
 
 # include "mlx.h"
 # include "mlx_int.h"
@@ -101,7 +109,7 @@ typedef struct s_sprite
 	t_pict	wall2;
 	t_pict	tile;
 	t_pict	obj;
-	t_pict	play;
+	t_pict	play[3];
 	t_pict	c_ex;
 	t_pict	o_ex;
 	t_pict	end;

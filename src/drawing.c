@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 14:22:08 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:30:34 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ void	erease_cursor(t_pict *img, int x, int y)
 	}
 }
 
-char	*get_color(t_pict *img, int i, int j)
+char	*get_color(t_pict *img, int i, int j, int frame)
 {
-	return (&img->addr[i * img->l_len + j * img->bytes / 8]);
+	(void) frame;
+	return (&img->addr[i * img->l_len + (j + ((frame * ASSET) + 1)) * img->bytes / 8]);
 }
 
 char	*get_asset(t_data *data, t_vect pos_img)
@@ -67,21 +68,21 @@ char	*get_asset(t_data *data, t_vect pos_img)
 	pos.y = (data->player.pos.y + pos_img.y);
 
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == '1' && data->map[pos.y / ASSET + 1] && data->map[pos.y / ASSET + 1][pos.x / ASSET] == '1')
-		return (get_color(&data->sprite.wall2, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.wall2, pos.y % ASSET, pos.x % ASSET, 0));
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == '1')
-		return (get_color(&data->sprite.wall, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.wall, pos.y % ASSET, pos.x % ASSET, 0));
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'e' && data->engine.obj > 0)
-		return (get_color(&data->sprite.c_ex, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.c_ex, pos.y % ASSET, pos.x % ASSET, 0));
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'e' && data->engine.obj == 0)
-		return (get_color(&data->sprite.o_ex, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.o_ex, pos.y % ASSET, pos.x % ASSET, 0));
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'c')
-		return (get_color(&data->sprite.obj, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.obj, pos.y % ASSET, pos.x % ASSET, 0));
 	if (data->map[pos.y / ASSET][pos.x / ASSET] == '2')
-		return (get_color(&data->sprite.tile, pos.y % ASSET, pos.x % ASSET));
-	return (get_color(img, pos.y % ASSET, pos.x % ASSET));
+		return (get_color(&data->sprite.tile, pos.y % ASSET, pos.x % ASSET, 0));
+	return (get_color(img, pos.y % ASSET, pos.x % ASSET, 0));
 }
 
-void	merge_image(t_pict screen, t_pict *img, t_data *data)
+void	merge_image(t_pict screen, t_pict *img, t_data *data, int frame)
 {
 	int		i;
 	int		j;
@@ -97,7 +98,7 @@ void	merge_image(t_pict screen, t_pict *img, t_data *data)
 		while (j < ASSET)
 		{
 			pixel = &screen.addr[i * screen.l_len + j * screen.bytes / 8];
-			color = get_color(img, i, j);
+			color = get_color(img, i, j, frame);
 			if (*(int *) color == -16777216)
 				color = get_asset(data, (t_vect){j, i});
 			*(unsigned int *) pixel = *(unsigned int *) color;
@@ -156,6 +157,38 @@ static void	draw_world(t_data *data, t_vect offset, t_vect offset_pix)
 	
 }
 
+void	select_frame(t_data *data, t_pict *sprt)
+{
+	static int 	frame;
+	static int	dir;
+
+	frame = frame % 50;
+	if (data->player.acc.x > 0)
+	{
+		if (dir != FORW)
+			frame = 0;
+		merge_image(data->engine.screen, &sprt[FORW], data, frame / FRAME_SPEED % 4);
+		frame++;
+		dir = FORW;
+	}
+	else if (data->player.acc.x < 0)
+	{
+		if (dir != BACK)
+			frame = 0;
+		merge_image(data->engine.screen, &sprt[BACK], data, frame / FRAME_SPEED % 4);
+		frame++;
+		dir = BACK;
+	}
+	else if (data->player.acc.x == 0)
+	{
+		if (dir != IDLE)
+			frame = 0;
+		merge_image(data->engine.screen, &sprt[IDLE], data, frame / FRAME_SPEED % 4);
+		frame++;
+		dir = IDLE;
+	}
+}
+
 void	world_init(t_data *data)
 {
 	t_vect	offset;
@@ -193,6 +226,7 @@ void	world_init(t_data *data)
 		offset_pix.y = 0;
 	}
 	draw_world(data, offset, offset_pix);
-	merge_image(data->engine.screen, &data->sprite.play, data);
+	select_frame(data, data->sprite.play);
+	// merge_image(data->engine.screen, data->sprite.play, data);
 	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen.img, data->player.pos.x - offset.x * ASSET - offset_pix.x ,data->player.pos.y - offset.y * ASSET - offset_pix.y);
 }
