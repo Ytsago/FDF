@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:16:20 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 14:21:03 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 11:07:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	asset_init(t_sprite *sprt)
 	sprt->c_ex.img = NULL;
 	sprt->o_ex.img = NULL;
 	sprt->obj.img = NULL;
-	sprt->play.img = NULL;
+	ft_bzero(&sprt->play, sizeof(t_pict) * 5);
 	sprt->tile.img = NULL;
 	sprt->wall.img = NULL;
 	sprt->wall2.img = NULL;

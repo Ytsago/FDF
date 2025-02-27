@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:28:06 by secros            #+#    #+#             */
-/*   Updated: 2025/02/25 22:00:10 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 11:14:20 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ static t_pict	new_image(t_data *data, char *path)
 	return (img);
 }
 
+/* void	*load_anim(t_data *data, t_pict **entity, char type)
+{
+
+} */
+
 void	load_asset(t_data *data)
 {
 	t_sprite	as;
@@ -38,7 +43,7 @@ void	load_asset(t_data *data)
 	as.o_ex = new_image(data, OEXIT);
 	as.end = new_image(data, END);
 	data->sprite = as;
-	if (!as.c_ex.img || !as.obj.img || !as.play.img || !as.o_ex.img
+	if (!as.c_ex.img || !as.obj.img /*||  !as.play.img  */|| !as.o_ex.img
 		|| !as.end.img || !as.tile.img || !as.wall.img || !as.wall2.img)
 		clean_exit(data, 1);
 }
