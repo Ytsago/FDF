@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 13:47:04 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 13:58:49 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define ESCAPE 65307
 # define ENTER 65293
 # define SPACE 32
+# define F_KEY
 
 // settings
 # define MAX_VELOCITY 15
@@ -119,7 +120,7 @@ typedef struct s_entity
 
 typedef struct s_engine
 {
-	int				key;
+	int				fly;
 	int				jump;
 	int				end;
 	int				obj;

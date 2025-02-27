@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:22:00 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 13:54:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 13:58:27 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ int	input(int key, void *param)
 	if (key == D_KEY)
 		data->player.acc.x = +1;
 	if (key == S_KEY)
-		data->player.velo.x *= FRICTION;
+		data->player.velo.x = 0;
 	if (key == A_KEY)
 		data->player.acc.x = -1;
+	if (key = F_KEY)
+		data->engine.fly *= 1;
 	if (key == ESCAPE)
 		clean_exit(data, 0);
 	return (1);
