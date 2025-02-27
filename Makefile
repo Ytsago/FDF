@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -Ofast
 LFLAGS = -lbsd -lX11 -lm -lXext
 CC = cc
 AR = ar
@@ -14,7 +14,7 @@ RESET  = \033[0m
 CFILE =	main.c
 
 FILE =	main.c check_map.c map_parsing.c pathing.c drawing.c input.c setting.c \
-		event.c loading.c setting_change.c game_loop.c
+		event.c loading.c setting_change.c game_loop.c color_util.c
 
 LIB_D = libft/
 

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:25:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 15:50:26 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:50:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ void	change_resolution(t_data *data);
 void	draw_cursor(t_pict *img, int x, int y);
 void	resolution(t_data *data);
 void	erease_cursor(t_pict *img, int x, int y);
+char	*get_asset(t_data *data, t_vect pos_img);
+char	*get_color(t_pict *img, int i, int j, int frame);
 
 //map_parsing
 int		map_parsing(t_data *data, char *path);

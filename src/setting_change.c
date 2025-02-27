@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:43:52 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 15:56:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:52:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	change_selection(t_data *data)
 	mlx_put_image_to_window(data->mlx_info.mlx, \
 	data->mlx_info.win, data->load->img, 0, 0);
 }
+
 void	draw_cursor(t_pict *img, int x, int y)
 {
 	int		i;

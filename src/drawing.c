@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 16:02:44 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 18:19:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static void	draw_tiles(t_data *data, int x[2], int y[2], t_vect offset_pix)
 	else
 		img = &data->sprite.tile;
 	mlx_put_image_to_window(data->mlx_info.mlx, \
-		data->mlx_info.win, img->img, x[0] * ASSET - offset_pix.x, y[0] * ASSET - offset_pix.y);
+		data->mlx_info.win, img->img, x[0] * ASSET - \
+		offset_pix.x, y[0] * ASSET - offset_pix.y);
 }
 
 static void	draw_world(t_data *data, t_vect offset, t_vect offset_pix)
@@ -84,12 +85,14 @@ static void	draw_world(t_data *data, t_vect offset, t_vect offset_pix)
 		y[1]++;
 		y[0]++;
 	}
-	
 }
+
+void	select_direction(t_data)
+{}
 
 void	select_frame(t_data *data, t_pict *sprt)
 {
-	static int 	frame;
+	static int	frame;
 	static int	dir;
 
 	frame = frame % 50;
@@ -97,7 +100,8 @@ void	select_frame(t_data *data, t_pict *sprt)
 	{
 		if (dir != FORW)
 			frame = 0;
-		merge_image(data->engine.screen, &sprt[FORW], data, frame / FRAME_SPEED % 4);
+		merge_image(data->engine.screen, &sprt[FORW], \
+		data, frame / FRAME_SPEED % 4);
 		frame++;
 		dir = FORW;
 	}
@@ -105,7 +109,8 @@ void	select_frame(t_data *data, t_pict *sprt)
 	{
 		if (dir != BACK)
 			frame = 0;
-		merge_image(data->engine.screen, &sprt[BACK], data, frame / FRAME_SPEED % 4);
+		merge_image(data->engine.screen, &sprt[BACK], \
+		data, frame / FRAME_SPEED % 4);
 		frame++;
 		dir = BACK;
 	}
@@ -113,53 +118,74 @@ void	select_frame(t_data *data, t_pict *sprt)
 	{
 		if (dir != IDLE)
 			frame = 0;
-		merge_image(data->engine.screen, &sprt[IDLE], data, frame / FRAME_SPEED % 4);
+		merge_image(data->engine.screen, &sprt[IDLE], \
+		data, frame / FRAME_SPEED % 4);
 		frame++;
 		dir = IDLE;
 	}
 }
+
 t_vect	compute_offset_x(t_data *data)
 {
 	t_vect	offset;
 
-}
-void	world_init(t_data *data)
-{
-	t_vect	offset;
-	t_vect	offset_pix;
-
 	offset.x = data->mlx_info.w_size->x / (2 * ASSET);
 	offset.x = data->player.pos.x / ASSET - offset.x;
-	offset_pix.x = data->player.pos.x % ASSET;
-	if (data->player.pos.x / ASSET + (offset_pix.x > 0) + data->mlx_info.w_size->x / (2 * ASSET) > \
-		(int) ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size->x % (2 * ASSET) == 0))
+	offset.y = data->player.pos.x % ASSET;
+	if (data->player.pos.x / ASSET + (offset.y > 0) + data->mlx_info.w_size->x \
+	/ (2 * ASSET) > (int) ft_strlen(data->map[0]) - 2 + \
+	(data->mlx_info.w_size->x % (2 * ASSET) == 0))
 	{
 		offset.x = ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size->x \
 		% (2 * ASSET) == 0) - data->mlx_info.w_size->x / ASSET;
-		offset_pix.x = 0;
+		offset.y = 0;
 	}
-	if (((offset.x * ASSET - offset_pix.x) / ASSET) < 0)
+	if (((offset.x * ASSET - offset.y) / ASSET) < 0)
 	{
 		offset.x = 0;
-		offset_pix.x = 0;
+		offset.y = 0;
 	}
-	offset_pix.y = data->player.pos.y % ASSET;
-	offset.y = data->mlx_info.w_size->y / (2 * ASSET);
-	offset.y = data->player.pos.y / ASSET - offset.y;
-	if (data->player.pos.y / ASSET + (offset_pix.y > 0) + data->mlx_info.w_size->y / (2 * ASSET) > \
-	(int) ft_tablen(data->map) - 1)
+	return (offset);
+}
+
+t_vect	compute_offset_y(t_data *data)
+{
+	t_vect	offset;
+
+	offset.x = data->mlx_info.w_size->y / (2 * ASSET);
+	offset.x = data->player.pos.y / ASSET - offset.x;
+	offset.y = data->player.pos.y % ASSET;
+	if (data->player.pos.y / ASSET + (offset.y > 0) + data->mlx_info.w_size->y \
+	/ (2 * ASSET) > (int) ft_tablen(data->map) - 1)
 	{
-		offset.y = ft_tablen(data->map) - 1 + (data->mlx_info.w_size->x \
+		offset.x = ft_tablen(data->map) - 1 + (data->mlx_info.w_size->x \
 		% (2 * ASSET) != 0) + (data->mlx_info.w_size->y % (2 * ASSET) == 112) \
 		- data->mlx_info.w_size->y / ASSET;
-		offset_pix.y = 0;
-	}
-	if (offset.y * ASSET + offset_pix.y < 0)
-	{
 		offset.y = 0;
-		offset_pix.y = 0;
 	}
+	if (offset.x * ASSET + offset.y < 0)
+	{
+		offset.x = 0;
+		offset.y = 0;
+	}
+	return (offset);
+}
+
+void	world_init(t_data *data)
+{
+	t_vect	offset;
+	t_vect	temp;
+	t_vect	offset_pix;
+
+	temp = compute_offset_x(data);
+	offset.x = temp.x;
+	offset_pix.x = temp.y;
+	temp = compute_offset_y(data);
+	offset.y = temp.x;
+	offset_pix.y = temp.y;
 	draw_world(data, offset, offset_pix);
 	select_frame(data, data->sprite.play);
-	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen.img, data->player.pos.x - offset.x * ASSET - offset_pix.x ,data->player.pos.y - offset.y * ASSET - offset_pix.y);
+	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, \
+	data->engine.screen.img, data->player.pos.x - offset.x * ASSET - \
+	offset_pix.x, data->player.pos.y - offset.y * ASSET - offset_pix.y);
 }
