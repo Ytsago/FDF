@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:22:00 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 14:00:17 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:52:04 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	input(int key, void *param)
 {
-	t_data *data;
+	t_data	*data;
 
 	data = param;
 	if (key == SPACE && data->engine.jump == 0)

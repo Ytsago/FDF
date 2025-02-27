@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:28:06 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 15:08:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:55:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static t_pict	new_image(t_data *data, char *path)
 {
 	t_pict	img;
 
-	img.img = mlx_xpm_file_to_image(data->mlx_info.mlx, path, &img.size.x, &img.size.y);
+	img.img = mlx_xpm_file_to_image(data->mlx_info.mlx, path, \
+	&img.size.x, &img.size.y);
 	if (!img.img)
 		write (2, "Failed to load asset\n", 21);
 	else
@@ -25,19 +26,26 @@ static t_pict	new_image(t_data *data, char *path)
 	return (img);
 }
 
-void	load_anim(t_data *data, t_pict *entity)
+int	load_anim(t_data *data, t_pict *entity)
 {
+	int	i;
+
+	i = 0;
 	entity[IDLE] = new_image(data, I_PLAYER);
 	entity[FORW] = new_image(data, F_PLAYER);
 	entity[BACK] = new_image(data, B_PLAYER);
+	while (i < BACK + 1)
+		if (!entity[i++].img)
+			return (1);
+	return (0);
 }
 
 void	load_asset(t_data *data)
 {
 	t_sprite	as;
+	int			error;
 
 	as.wall = new_image(data, WALL);
-	// as.play = new_image(data, PLAYER);
 	as.tile = new_image(data, TILE);
 	as.obj = new_image(data, OBJ);
 	as.c_ex = new_image(data, CEXIT);
@@ -45,8 +53,8 @@ void	load_asset(t_data *data)
 	as.o_ex = new_image(data, OEXIT);
 	as.end = new_image(data, END);
 	data->sprite = as;
-	load_anim(data, (t_pict *)&data->sprite.play);
-	if (!as.c_ex.img || !as.obj.img /*||  !as.play.img  */|| !as.o_ex.img
+	error = load_anim(data, (t_pict *)&data->sprite.play);
+	if (!as.c_ex.img || !as.obj.img || error || !as.o_ex.img
 		|| !as.end.img || !as.tile.img || !as.wall.img || !as.wall2.img)
 		clean_exit(data, 1);
 }

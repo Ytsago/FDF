@@ -6,81 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 15:30:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 16:02:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	draw_cursor(t_pict *img, int x, int y)
-{
-	int		i;
-	int		j;
-	char	*pixel;
-
-	i = 0;
-	while (i < 30)
-	{
-		j = 0;
-		while ((j < 2 * i && i <= 15) || (i > 15 && j < 60 - i * 2))
-		{
-			pixel = &img->addr[(y + i) * img->l_len + (x + j) * img->bytes / 8];
-			*(unsigned int *) pixel = 0xFF0000;
-			j++;
-		}
-		i++;
-	}
-}
-
-void	erease_cursor(t_pict *img, int x, int y)
-{
-	int		i;
-	int		j;
-	char	*pixel;
-
-	i = 0;
-	while (i < 30)
-	{
-		j = 0;
-		while ((j < 2 * i && i <= 15) || (i > 15 && j < 60 - i * 2))
-		{
-			pixel = &img->addr[(y + i) * img->l_len + (x + j) * img->bytes / 8];
-			*(unsigned int *) pixel = 0x432a73;
-			j++;
-		}
-		i++;
-	}
-}
-
-char	*get_color(t_pict *img, int i, int j, int frame)
-{
-	(void) frame;
-	return (&img->addr[i * img->l_len + (j + ((frame * ASSET) + 1)) * img->bytes / 8]);
-}
-
-char	*get_asset(t_data *data, t_vect pos_img)
-{
-	t_vect	pos;
-	t_pict	*img;
-
-	img = &data->sprite.tile;
-	pos.x = (data->player.pos.x + pos_img.x);
-	pos.y = (data->player.pos.y + pos_img.y);
-
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == '1' && data->map[pos.y / ASSET + 1] && data->map[pos.y / ASSET + 1][pos.x / ASSET] == '1')
-		return (get_color(&data->sprite.wall2, pos.y % ASSET, pos.x % ASSET, 0));
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == '1')
-		return (get_color(&data->sprite.wall, pos.y % ASSET, pos.x % ASSET, 0));
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'e' && data->engine.obj > 0)
-		return (get_color(&data->sprite.c_ex, pos.y % ASSET, pos.x % ASSET, 0));
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'e' && data->engine.obj == 0)
-		return (get_color(&data->sprite.o_ex, pos.y % ASSET, pos.x % ASSET, 0));
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == 'c')
-		return (get_color(&data->sprite.obj, pos.y % ASSET, pos.x % ASSET, 0));
-	if (data->map[pos.y / ASSET][pos.x / ASSET] == '2')
-		return (get_color(&data->sprite.tile, pos.y % ASSET, pos.x % ASSET, 0));
-	return (get_color(img, pos.y % ASSET, pos.x % ASSET, 0));
-}
 
 void	merge_image(t_pict screen, t_pict *img, t_data *data, int frame)
 {
@@ -188,7 +118,11 @@ void	select_frame(t_data *data, t_pict *sprt)
 		dir = IDLE;
 	}
 }
+t_vect	compute_offset_x(t_data *data)
+{
+	t_vect	offset;
 
+}
 void	world_init(t_data *data)
 {
 	t_vect	offset;
@@ -197,7 +131,6 @@ void	world_init(t_data *data)
 	offset.x = data->mlx_info.w_size->x / (2 * ASSET);
 	offset.x = data->player.pos.x / ASSET - offset.x;
 	offset_pix.x = data->player.pos.x % ASSET;
-	offset_pix.y = data->player.pos.y % ASSET;
 	if (data->player.pos.x / ASSET + (offset_pix.x > 0) + data->mlx_info.w_size->x / (2 * ASSET) > \
 		(int) ft_strlen(data->map[0]) - 2 + (data->mlx_info.w_size->x % (2 * ASSET) == 0))
 	{
@@ -210,6 +143,7 @@ void	world_init(t_data *data)
 		offset.x = 0;
 		offset_pix.x = 0;
 	}
+	offset_pix.y = data->player.pos.y % ASSET;
 	offset.y = data->mlx_info.w_size->y / (2 * ASSET);
 	offset.y = data->player.pos.y / ASSET - offset.y;
 	if (data->player.pos.y / ASSET + (offset_pix.y > 0) + data->mlx_info.w_size->y / (2 * ASSET) > \
@@ -227,6 +161,5 @@ void	world_init(t_data *data)
 	}
 	draw_world(data, offset, offset_pix);
 	select_frame(data, data->sprite.play);
-	// merge_image(data->engine.screen, data->sprite.play, data);
 	mlx_put_image_to_window(data->mlx_info.mlx, data->mlx_info.win, data->engine.screen.img, data->player.pos.x - offset.x * ASSET - offset_pix.x ,data->player.pos.y - offset.y * ASSET - offset_pix.y);
 }

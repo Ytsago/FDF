@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:16:20 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 11:07:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:52:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	data_init(t_data *data)
 	data->mlx_info.w_size->x, data->mlx_info.w_size->y, TITLE);
 	if (!data->mlx_info.win)
 		clean_exit(data, 1);
-	data->engine.screen.img =mlx_new_image(data->mlx_info.mlx, ASSET, ASSET);
+	data->engine.screen.img = mlx_new_image(data->mlx_info.mlx, ASSET, ASSET);
 	if (!data->engine.screen.img)
 		return ((void) clean_exit(data, 1));
 	data->engine.screen.addr = mlx_get_data_addr(data->engine.screen.img, \
