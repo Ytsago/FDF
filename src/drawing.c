@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:20:49 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 18:19:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/27 18:25:29 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ static void	draw_world(t_data *data, t_vect offset, t_vect offset_pix)
 		y[0]++;
 	}
 }
-
+/* 
 void	select_direction(t_data)
 {}
-
+*/
 void	select_frame(t_data *data, t_pict *sprt)
 {
 	static int	frame;
