@@ -42,7 +42,7 @@ all: $(NAME) Makefile
 
 $(NAME) : $(OBJS)
 	@echo "$(YELLOW)Creating final product : $(BLUE)$@...$(RESET)"
-	@$(CC) $(CFLAGS) $(LFLAGS) $^ $(LIB) -o $@ && echo "$(GREEN)$@ Created successfully !$(RESET)"
+	@$(CC) $(CFLAGS)  $^ $(LIB) $(LFLAGS) -o $@ && echo "$(GREEN)$@ Created successfully !$(RESET)"
 
 $(OBJDIR)%.o: $(SRCDIR)%.c $(LIB) $(INCDIR)$(INC) | $(OBJDIR)
 	$(CC) -c $(CFLAGS) -I $(INCDIR) -I $(MLX_D) -I $(LIB_D)$(INCDIR) $< -o $@

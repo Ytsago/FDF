@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 19:53:36 by secros            #+#    #+#             */
-/*   Updated: 2025/02/27 18:13:01 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/03 19:11:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,6 @@ char	remove_obj(t_data *data, t_hitbox hitbox, char c)
 
 static void	check_pos(t_data *data)
 {
-	int	x;
-	int	y;
-
-	x = data->player.pos.x / ASSET;
-	y = data->player.pos.y / ASSET;
 	if (remove_obj(data, data->player.hitbox, 'c'))
 		data->engine.obj--;
 	if (data->engine.obj == 0 && remove_obj(data, data->player.hitbox, 'e'))
